@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://3potrfx52npy"]
+
+[ext_resource type="Script" path="res://scenes/main_scene.gd" id="1_wdwc8"]
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_wg5jp"]
+
+[node name="main_scene" type="Node2D"]
+script = ExtResource("1_wdwc8")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="mic_input" type="AudioStreamPlayer" parent="."]
+stream = SubResource("AudioStreamMicrophone_wg5jp")
+autoplay = true
+bus = &"MicIn"
