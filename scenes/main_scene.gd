@@ -3,7 +3,7 @@ extends Node2D
 var busIndex:int
 var recordEffect:AudioEffectRecord
 
-var levelArray = [true,false,true,false]
+var levelArray = [1,1,1,1]
 var levelArrayIndex = 0
 
 var timingWindow:float = 0.1
@@ -12,6 +12,8 @@ var levelTime:float = 0
 
 var lastBeatTime:float
 var nextBeatTime:float
+
+var noteObject = preload("res://prefabs/test_object.tscn")
 
 func _ready():
 	# offset the playback of the song by the length of 1 beat
@@ -28,9 +30,13 @@ func _ready():
 		func():
 			# register beat time and next
 			lastBeatTime = levelTime - BeatManager.beatDuration
-			nextBeatTime = levelTime
+			nextBeatTime = levelTime 
 			
-			print(levelArrayIndex)
+			# if object is in level array index we need to spawn it
+			print(levelArrayIndex +1 )
+			
+			if levelArray[levelArrayIndex]:
+				add_child(noteObject.instantiate())
 			
 			# loop back on array if we exceed size of it
 			if levelArrayIndex == levelArray.size() - 1:

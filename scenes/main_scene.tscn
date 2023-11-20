@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://3potrfx52npy"]
+[gd_scene load_steps=5 format=3 uid="uid://3potrfx52npy"]
 
 [ext_resource type="Script" path="res://scenes/main_scene.gd" id="1_wdwc8"]
 [ext_resource type="AudioStream" uid="uid://bpcg1fxnvjy8n" path="res://audio/PinkPantheress - Nice to meet you (Lyrics) ft. Central Cee.mp3" id="2_6nc35"]
+[ext_resource type="Texture2D" uid="uid://dofm6onyjkxok" path="res://icon.svg" id="3_eb1c8"]
 
 [sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_wg5jp"]
 
@@ -15,5 +16,10 @@ bus = &"MicIn"
 
 [node name="ExampleAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_6nc35")
+
+[node name="test_end" type="Sprite2D" parent="."]
+self_modulate = Color(1, 0, 0.556863, 1)
+position = Vector2(2.08165e-12, 200)
+texture = ExtResource("3_eb1c8")
 
 [node name="Camera2D" type="Camera2D" parent="."]
