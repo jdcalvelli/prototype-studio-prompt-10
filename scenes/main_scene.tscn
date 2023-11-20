@@ -15,6 +15,5 @@ bus = &"MicIn"
 
 [node name="ExampleAudio" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_6nc35")
-autoplay = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
