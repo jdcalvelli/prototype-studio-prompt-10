@@ -7,9 +7,9 @@
 [node name="main_scene" type="Node2D"]
 script = ExtResource("1_wdwc8")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-
 [node name="mic_input" type="AudioStreamPlayer" parent="."]
 stream = SubResource("AudioStreamMicrophone_wg5jp")
 autoplay = true
 bus = &"MicIn"
+
+[node name="Camera2D" type="Camera2D" parent="."]

@@ -1,7 +1,6 @@
 [gd_resource type="AudioBusLayout" format=3 uid="uid://bc3wu44cec10"]
 
 [resource]
-bus/0/mute = true
 bus/1/name = &"MicOut"
 bus/1/solo = false
 bus/1/mute = true
