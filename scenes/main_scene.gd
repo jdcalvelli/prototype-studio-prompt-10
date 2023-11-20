@@ -3,17 +3,28 @@ extends Node2D
 var busIndex:int
 var recordEffect:AudioEffectRecord
 
-var levelArray = [false,true,false,true]
+var levelArray = [true,true,true,true]
 var levelArrayIndex = 0
+
+var timingWindow:float = 0.1
+
+var levelTime:float = 0
+
+var lastBeatTime:float
+var nextBeatTime:float
 
 func _ready():
 	busIndex = AudioServer.get_bus_index("MicIn")
 	
 	BeatManager.beatTimer.timeout.connect(
 		func():
+			# register beat time and next
+			lastBeatTime = levelTime
+			nextBeatTime = levelTime + BeatManager.beatDuration
+			
 			# read the levelArray
 			if levelArray[levelArrayIndex]:
-				print("official beat")
+				print(levelArrayIndex)
 			
 			# loop back on array if we exceed size of it
 			if levelArrayIndex == levelArray.size() - 1:
@@ -23,7 +34,10 @@ func _ready():
 				levelArrayIndex += 1
 	)
 
-func _process(delta):
+func _physics_process(delta):
+	levelTime += delta
+	
 	var audioSample:float = db_to_linear(AudioServer.get_bus_peak_volume_left_db(busIndex, 0))
-	if audioSample >= 0.8:
-		print("clap reg")
+	if audioSample >= 0.6:
+		if levelTime <= lastBeatTime + timingWindow or levelTime >= nextBeatTime - timingWindow:
+			print("clap on beat")

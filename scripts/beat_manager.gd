@@ -1,6 +1,6 @@
 extends Node
 
-var bpm:float = 90
+var bpm:float = 148
 # beat duration = 60 / bpm
 var beatDuration:float = 60 / bpm
 
@@ -16,3 +16,5 @@ func _ready():
 	eighthTimer.autostart = true
 	eighthTimer.wait_time = beatDuration / 2
 	add_child(eighthTimer)
+	
+	print(beatDuration)
