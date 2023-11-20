@@ -17,6 +17,8 @@ var noteObject = preload("res://prefabs/test_object.tscn")
 
 signal clapSuccessful()
 
+var score:int = 0
+
 func _ready():
 	$ExampleAudio.play()
 	
@@ -37,7 +39,6 @@ func _ready():
 			# if the next beat in the array is true
 			if levelArray[nextBeat]:
 				var noteToAdd = noteObject.instantiate()
-				noteToAdd.timeCreated = levelTime
 				add_child(noteToAdd)
 			
 			beatCounter += 1
@@ -53,9 +54,13 @@ func _physics_process(delta):
 			print("within last beat window")
 			# send off some signal?
 			clapSuccessful.emit()
+			score += 1
 		elif levelTime >= nextBeatTime - timingWindow and levelTime <= nextBeatTime:
 			print("within next beat window")
 			# send off some signal?
 			clapSuccessful.emit()
+			score += 1
 		
+	$Label.text = str(score)
+	
 	levelTime += delta

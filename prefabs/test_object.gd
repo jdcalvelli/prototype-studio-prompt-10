@@ -1,7 +1,5 @@
 extends Sprite2D
 
-var timeCreated:float
-
 func _ready():
 	var tween = create_tween()
 	tween.tween_property(
