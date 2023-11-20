@@ -3,54 +3,49 @@ extends Node2D
 var busIndex:int
 var recordEffect:AudioEffectRecord
 
-var levelArray = [1,1,1,1]
-var levelArrayIndex = 0
+var levelArray = [0,1,0,1]
+var beatCounter = 0
 
-var timingWindow:float = 0.1
+var timingWindow:float = 0.2
 
 var levelTime:float = 0
-
 var lastBeatTime:float
 var nextBeatTime:float
+var thisBeat:int
+var nextBeat:int
 
 var noteObject = preload("res://prefabs/test_object.tscn")
 
 func _ready():
-	# offset the playback of the song by the length of 1 beat
-	# to get everything on track such that we're registering
-	# the start of beats not ends?
-	get_tree().create_timer(BeatManager.beatDuration).timeout.connect(
-		func():
-			$ExampleAudio.play()
-	)
+	$ExampleAudio.play()
 	
 	busIndex = AudioServer.get_bus_index("MicIn")
 	
 	BeatManager.beatTimer.timeout.connect(
 		func():
-			# register beat time and next
-			lastBeatTime = levelTime - BeatManager.beatDuration
-			nextBeatTime = levelTime 
+			lastBeatTime = levelTime
+			nextBeatTime = levelTime + BeatManager.beatDuration
 			
-			# if object is in level array index we need to spawn it
-			print(levelArrayIndex +1 )
+			thisBeat = beatCounter % 4
 			
-			if levelArray[levelArrayIndex]:
+			if thisBeat + 1 < levelArray.size():
+				nextBeat = thisBeat + 1
+			else:
+				nextBeat = 0
+			
+			# if the next beat in the array is true
+			if levelArray[nextBeat]:
 				add_child(noteObject.instantiate())
 			
-			# loop back on array if we exceed size of it
-			if levelArrayIndex == levelArray.size() - 1:
-				levelArrayIndex = 0
-			# else move to next potential beat
-			else:
-				levelArrayIndex += 1
+			beatCounter += 1
 	)
 
 func _physics_process(delta):
-	levelTime += delta
-	
 	var audioSample:float = db_to_linear(AudioServer.get_bus_peak_volume_left_db(busIndex, 0))
 	if audioSample >= 0.6:
-		if levelTime <= lastBeatTime + timingWindow or levelTime >= nextBeatTime - timingWindow:
-			if levelArray[levelArrayIndex]:
-				print("clap on CORRECT beat")
+		if levelTime >= lastBeatTime and levelTime <= lastBeatTime + timingWindow:
+			print("within last beat window")
+		elif levelTime >= nextBeatTime - timingWindow and levelTime <= nextBeatTime:
+			print("within next beat window")
+		
+	levelTime += delta
