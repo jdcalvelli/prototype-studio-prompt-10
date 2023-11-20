@@ -1,12 +1,11 @@
 extends Node2D
 
 var busIndex:int
-var recordEffect:AudioEffectRecord
 
-var levelArray = [0,1,0,1]
+var levelArray = [0,0,0,1]
 var beatCounter = 0
 
-var timingWindow:float = 0.2
+var timingWindow:float = 0.07
 
 var levelTime:float = 0
 var lastBeatTime:float
@@ -15,6 +14,8 @@ var thisBeat:int
 var nextBeat:int
 
 var noteObject = preload("res://prefabs/test_object.tscn")
+
+signal clapSuccessful()
 
 func _ready():
 	$ExampleAudio.play()
@@ -35,9 +36,14 @@ func _ready():
 			
 			# if the next beat in the array is true
 			if levelArray[nextBeat]:
-				add_child(noteObject.instantiate())
+				var noteToAdd = noteObject.instantiate()
+				noteToAdd.timeCreated = levelTime
+				add_child(noteToAdd)
 			
 			beatCounter += 1
+			
+			if beatCounter % 4 == 0:
+				levelArray.shuffle()
 	)
 
 func _physics_process(delta):
@@ -45,7 +51,11 @@ func _physics_process(delta):
 	if audioSample >= 0.6:
 		if levelTime >= lastBeatTime and levelTime <= lastBeatTime + timingWindow:
 			print("within last beat window")
+			# send off some signal?
+			clapSuccessful.emit()
 		elif levelTime >= nextBeatTime - timingWindow and levelTime <= nextBeatTime:
 			print("within next beat window")
+			# send off some signal?
+			clapSuccessful.emit()
 		
 	levelTime += delta
